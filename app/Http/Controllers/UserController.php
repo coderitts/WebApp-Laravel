@@ -9,7 +9,6 @@ class UserController extends Controller
 {
     public function index()
     {
-        $data = DB::table("article")->get();
-        return view("index",["index" => $data]);
+
     }
 }

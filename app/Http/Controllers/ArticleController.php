@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Article;
 
 class ArticleController extends Controller
 {
+    public function __construct()
+    {
+        return $this->middleware(["auth"]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -14,10 +20,10 @@ class ArticleController extends Controller
             "description" => "required"
         ]);
 
-        DB::table("article")->insert([
-            "title" => $request->title,
-            "description" => $request->description
-        ]);
+        $data = new Article;
+        $data->title = $request->title;
+        $data->description = $request->description;
+        $data->save();
 
         return redirect()->back();
     }
@@ -25,7 +31,7 @@ class ArticleController extends Controller
     public function edit($id)
     {
         $data = DB::table("article")->where("id",$id)->get();
-        return view("edit",["data" => $data]);
+        return view("dashboard.edit",["data" => $data]);
     }
 
     public function update(Request $request)
@@ -40,12 +46,14 @@ class ArticleController extends Controller
             "description" => $request->description
         ]);
 
-        return redirect("/");
+        return redirect("/dashboard");
     }
 
     public function destroy($id)
     {
-        DB::table("article")->where("id",$id)->delete();
+        $data = Article::find($id);
+        $data->delete();
+        
         return redirect()->back();
     }
 }

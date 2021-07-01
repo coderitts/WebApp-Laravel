@@ -7,7 +7,7 @@
 <body>
 
 	@foreach($data as $data)
-	<form method="POST" action="/article/update">
+	<form method="POST" action="/dashboard/article/update">
 		@csrf
 		<input type="hidden" name="id" value="{{$data->id}}">	
 		<label>
